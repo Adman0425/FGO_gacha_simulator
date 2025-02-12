@@ -89,7 +89,7 @@ function drawCard() {
 function displayCard(card) {
     const cardDiv = document.createElement("div");
     cardDiv.classList.add("card");
-    cardDiv.innerHTML = `<img src="${card.imageUrl}" width="100" height="150" alt="${card.name}">`;
+    cardDiv.innerHTML = `<img src="images/${card.imageUrl}" width="100" height="150" alt="${card.name}">`;
     resultContainer.appendChild(cardDiv);
 }
 
