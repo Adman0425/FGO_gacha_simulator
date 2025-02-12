@@ -13,13 +13,20 @@
         .result-container {
             margin-top: 20px;
         }
-      .btn-img {
+        .btn-img {
             cursor: pointer;
+        }
+        .pool-option {
+            cursor: pointer;
+            margin: 5px;
         }
     </style>
 </head>
 <body>
     <h1>FGO 自定義卡池模擬器</h1>
+    <div class="pool-option" data-pool="permanent_pool.json">常駐卡池</div>
+    <div class="pool-option" data-pool="pu_pool.json">PU卡池</div>
+    
     <img id="singleDrawBtn" src="images/single_draw_btn.png" alt="1回召喚" class="btn-img">
     <img id="tenDrawBtn" src="images/ten_draw_btn.png" alt="11回召喚" class="btn-img">
     <div id="resultContainer" class="result-container"></div>
