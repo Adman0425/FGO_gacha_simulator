@@ -90,7 +90,7 @@ function displayCard(card) {
     const cardDiv = document.createElement("div");
     cardDiv.classList.add("card");
 
-    // Construct the correct image path
+    // 常數替代圖片路徑
     const imgSrc = card.imageUrl;
     
     cardDiv.innerHTML = `<img src="${imgSrc}" width="150" height="150" alt="${card.name}">`;
@@ -114,7 +114,7 @@ singleDrawBtn.addEventListener("click", () => {
     }
 });
 
-// 十連抽按鈕事件監聽器
+// 十連按鈕事件監聽器
 tenDrawBtn.addEventListener("click", () => {
     resultContainer.innerHTML = ""; 
 
