@@ -96,7 +96,8 @@ function displayCard(card, index) {
     cardDiv.innerHTML = `<img src="${imgSrc}" width="100" height="100" alt="${card.name}">`;
 
     // 行數
-    const rowNumber = Math.floor(index / 6) + 1; // Calculate row number (1 or 2)
+    const rowNumber = Math.floor(index / 6) + 1;
+    console.log(`Card ${card.name} is in row ${rowNumber}`);
     let row = document.querySelector(`.result-row:nth-child(${rowNumber})`);
     if (!row) {
         row = document.createElement("div");
