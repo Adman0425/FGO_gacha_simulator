@@ -122,7 +122,7 @@ singleDrawBtn.addEventListener("click", () => {
 tenDrawBtn.addEventListener("click", () => {
     console.log("十抽已按下");
     resultContainer.innerHTML = ""; 
-
+    
     let drawnCards =;
     for (let i = 0; i < 11; i++) {
         drawnCards.push(drawCard());
