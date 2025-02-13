@@ -4,14 +4,18 @@
     <title>Fate/Grand Order Customized Gacha Simulator</title>
     <style>
         .card {
-            width: 100px;
-            height: 100px;
+            width: 132px;
+            height: 144px;
             border: 1px solid black;
             margin: 5px;
             display: inline-block;
         }
         .result-container {
             margin-top: 20px;
+            width: 1280px;
+            height: 720px;
+            margin-left: auto;
+            margin-right: auto; /*Body水平置中*/
         }
         .result-row {
             display: flex;
@@ -51,10 +55,10 @@
     <div class="pool-option" data-pool="normal_pool.json">常駐卡池</div>
     <div class="pool-option" data-pool="jerusalem_pu1.json">雙生：羔羊不語聖家 耶路撒冷 推薦召喚1</div>
     <div class="pool-option" data-pool="replica7_pu2.json">仿篇敘述I 越界證明起點 冬木2035 推薦召喚2</div>
-    
+
+    <div id="resultContainer" class="result-container"></div>
     <img id="singleDrawBtn" src="images/single_draw_btn.png" alt="1回召喚" class="btn-img">
     <img id="tenDrawBtn" src="images/ten_draw_btn.png" alt="11回召喚" class="btn-img">
-    <div id="resultContainer" class="result-container"></div>
 
     <script src="script.js"></script>
 </body>
