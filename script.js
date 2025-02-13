@@ -124,7 +124,7 @@ tenDrawBtn.addEventListener("click", () => {
     resultContainer.innerHTML = ""; 
     
     //let drawnCards =;
-    let drawnCards = ;
+    drawnCards = new stack();
     for (let i = 0; i < 11; i++) {
         drawnCards.push(drawCard());
     }
