@@ -93,7 +93,7 @@ function displayCard(card) {
     // Construct the correct image path
     const imgSrc = card.imageUrl;
     
-    cardDiv.innerHTML = `<img src="${imgSrc}" width="100" height="150" alt="${card.name}">`;
+    cardDiv.innerHTML = `<img src="${imgSrc}" width="150" height="150" alt="${card.name}">`;
     resultContainer.appendChild(cardDiv);
 }
 
