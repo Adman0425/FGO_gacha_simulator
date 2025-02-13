@@ -120,7 +120,7 @@ tenDrawBtn.addEventListener("click", () => {
     console.log("十抽已按下");
     resultContainer.innerHTML = ""; 
 
-    let drawnCards =;
+    let drawnCards = [];
 
     // 處理保底
     let guaranteed3StarServant = null;
