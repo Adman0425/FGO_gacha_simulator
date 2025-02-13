@@ -162,9 +162,9 @@ tenDrawBtn.addEventListener("click", () => {
     shuffle(drawnCards);
 
     // 顯示抽卡結果
-    drawnCards.forEach(card => {
+    drawnCards.forEach((card, index) => {
         if (card) {
-            displayCard(card);
+            displayCard(card, index);
         }
     });
 });
