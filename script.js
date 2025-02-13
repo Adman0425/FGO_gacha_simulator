@@ -7,6 +7,7 @@ function loadPool(poolFile) {
         .then(data => {
             cardPool = data.servants.concat(data.craft_essences);
             calculateCardProbabilities(data);
+            console.log("機率計算完畢");
         })
         .catch(error => console.error("載入卡池資料錯誤：", error));
 }
@@ -65,6 +66,7 @@ poolOptions.forEach(option => {
 
 // 初始載入常駐卡池
 loadPool("normal_pool.json");
+console.log("卡池載入");
 
 // 選擇 HTML 元素
 const singleDrawBtn = document.getElementById("singleDrawBtn");
@@ -107,8 +109,10 @@ function shuffle(array) {
 
 // 單抽按鈕事件監聽器
 singleDrawBtn.addEventListener("click", () => {
+    console.log("單抽已按下");
     resultContainer.innerHTML = "";
     const card = drawCard();
+    console.log("已抽卡");
     if (card) {
         displayCard(card);
     }
@@ -116,6 +120,7 @@ singleDrawBtn.addEventListener("click", () => {
 
 // 十連按鈕事件監聽器
 tenDrawBtn.addEventListener("click", () => {
+    console.log("十抽已按下");
     resultContainer.innerHTML = ""; 
 
     let drawnCards =;
