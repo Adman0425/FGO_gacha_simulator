@@ -97,6 +97,14 @@ function displayCard(card) {
     resultContainer.appendChild(cardDiv);
 }
 
+// Fisher-Yates Shuffle Algorithm
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 // 單抽按鈕事件監聽器
 singleDrawBtn.addEventListener("click", () => {
     resultContainer.innerHTML = "";
@@ -108,11 +116,47 @@ singleDrawBtn.addEventListener("click", () => {
 
 // 十連抽按鈕事件監聽器
 tenDrawBtn.addEventListener("click", () => {
-    resultContainer.innerHTML = "";
+    resultContainer.innerHTML = ""; 
+
+    let drawnCards =;
     for (let i = 0; i < 11; i++) {
-        const card = drawCard();
+        drawnCards.push(drawCard());
+    }
+
+    // 分開檢查從者及禮裝保底
+    let servants = drawnCards.filter(card => card.type === "servant");
+    let ces = drawnCards.filter(card => card.type === "craft_essence");
+
+    let has3StarServant = servants.some(card => card.rarity === 3);
+    let has4StarCE = ces.some(card => card.rarity === 4);
+
+    // 保底演算
+    while (!has3StarServant) {
+        servants.pop();
+        let newServant = drawCard();
+        if (newServant.type === "servant" && newServant.rarity === 3) {
+            has3StarServant = true;
+        }
+        servants.push(newServant);
+    }
+
+    while (!has4StarCE) {
+        ces.pop();
+        let newCE = drawCard();
+        if (newCE.type === "craft_essence" && newCE.rarity === 4) {
+            has4StarCE = true;
+        }
+        ces.push(newCE);
+    }
+
+    // 打亂抽卡順序
+    drawnCards = servants.concat(ces);
+    shuffle(drawnCards);
+
+    // 顯示抽卡結果
+    drawnCards.forEach(card => {
         if (card) {
             displayCard(card);
         }
-    }
+    });
 });
