@@ -93,7 +93,7 @@ function displayCard(card, index) {
     
     // 常數替代圖片路徑
     const imgSrc = card.imageUrl;
-    cardDiv.innerHTML = `<img src="${imgSrc}" width="100" height="100" alt="${card.name}">`;
+    cardDiv.innerHTML = `<img src="${imgSrc}" width="132" height="144" alt="${card.name}">`;
 
     // 行數
     const rowNumber = Math.floor(index / 6) + 1;
