@@ -129,7 +129,7 @@
         { "name": "耀星哈桑", "rarity": 4, "type": "servant", "imageUrl": "images/servant/Servant408.jpg" },
         { "name": "婁希", "rarity": 5, "type": "servant", "imageUrl": "images/servant/Servant429.jpg" },
         { "name": "黑姬", "rarity": 4, "type": "servant", "imageUrl": "images/servant/Servant434.jpg" },
-        { "name": "德川家康", "rarity": 5, "type": "servant", "imageUrl": "images/servant/Servant10012.jpg", "isPu": true }
+        { "name": "德川家康", "rarity": 5, "type": "servant", "imageUrl": "images/servant/Servant1007.jpg", "isPu": true }
     ],
     "craft_essences": [
         { "name": "元素轉換", "rarity": 5, "type": "craft_essence", "imageUrl": "images/craft_essence/ce31.jpg" },
