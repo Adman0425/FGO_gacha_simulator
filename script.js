@@ -55,17 +55,15 @@ function calculateCardProbabilities(pool) {
 }
 
 // 選擇卡池檔案
-const poolOptions = document.querySelectorAll(".pool-option");
-poolOptions.forEach(option => {
-    option.addEventListener("click", () => {
-        const poolFile = option.dataset.pool;
-        loadPool(poolFile);
-    });
+const poolSelect = document.getElementById("poolSelect");
+poolSelect.addEventListener("change", () => {
+    const poolFile = poolSelect.value;
+    console.log("卡池載入");
+    loadPool(poolFile);
 });
 
 // 初始載入常駐卡池
-loadPool("normal_pool.json");
-// console.log("卡池載入");
+// loadPool("normal_pool.json");
 
 // 選擇 HTML 元素
 const singleDrawBtn = document.getElementById("singleDrawBtn");
@@ -97,7 +95,7 @@ function displayCard(card, index) {
 
     // 行數
     const rowNumber = Math.floor(index / 6) + 1;
-    console.log(`Card ${card.name} is in row ${rowNumber}`);
+    // console.log(`Card ${card.name} is in row ${rowNumber}`);
     let row = document.querySelector(`.result-row:nth-child(${rowNumber})`);
     if (!row) {
         row = document.createElement("div");
@@ -128,7 +126,6 @@ singleDrawBtn.addEventListener("click", () => {
 
 // 十連按鈕事件監聽器
 tenDrawBtn.addEventListener("click", () => {
-    console.log("十抽已按下");
     resultContainer.innerHTML = ""; 
 
     let drawnCards = [];
