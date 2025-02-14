@@ -53,9 +53,22 @@
 </head>
 <body>
     <h1>FGO 自定義卡池模擬器</h1>
-    <div class="pool-option" data-pool="normal_pool.json">常駐卡池</div>
-    <div class="pool-option" data-pool="jerusalem_pu1.json">雙生：羔羊不語聖家 耶路撒冷 推薦召喚1</div>
-    <div class="pool-option" data-pool="replica7_pu2.json">仿篇敘述I 越界證明起點 冬木2035 推薦召喚2</div>
+    <select id="poolSelect">
+        <option value="normal_pool.json">常駐卡池</option>
+        <option value="1a_pu.json">1st Anniversary 推薦召喚</option>
+        <option value="shabakyoku_pu1.json">大奧：新章 應援召喚</option>
+        <option value="shabakyoku_pu2.json">百花繚亂大奧風雲─娑婆局嘆息─ 推薦召喚1</option>
+        <option value="shabakyoku_pu3.json">百花繚亂大奧風雲─娑婆局嘆息─ 推薦召喚2</option>
+        <option value="harajuku_pu1.json">雙生：異端絕種禁區 原宿 推薦召喚1</option>
+        <option value="harajuku_pu2.json">雙生：異端絕種禁區 原宿 推薦召喚2</option>
+        <option value="harajuku_pu3.json">雙生：異端絕種禁區 原宿 推薦召喚3</option>
+        <option value="jerusalem_pu1.json">雙生：羔羊不語聖家 耶路撒冷 推薦召喚1</option>
+        <option value="jerusalem_pu2.json">雙生：羔羊不語聖家 耶路撒冷 推薦召喚2</option>
+        <option value="jerusalem_pu3.json">雙生：羔羊不語聖家 耶路撒冷 推薦召喚3</option>
+        <option value="replica7_pu1.json">仿篇敘述 Replica 應援召喚</option>
+        <option value="replica7_pu2.json">仿篇敘述I 越界證明起點 冬木2035 推薦召喚1</option>
+        <option value="replica7_pu3.json">仿篇敘述I 越界證明起點 冬木2035 推薦召喚2</option>
+    </select>
 
     <div id="resultContainer" class="result-container"></div>
     <img id="singleDrawBtn" src="images/single_draw_btn.png" alt="1回召喚" class="btn-img">
