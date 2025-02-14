@@ -50,6 +50,7 @@ function calculateCardProbabilities(pool) {
                 probability = (rarityProbabilities[rarity][type === "servants" ? "servant" : "craft_essence"] - (puRarityProbabilities[rarity][type === "servants" ? "servant" : "craft_essence"] * rarityCount.pu)) / rarityCount.normal;
             }
             card.probability = probability;
+            console.log(`${card.name} (${card.rarity}星 ${card.type}) 機率：${probability}`);
         }
     }
 }
