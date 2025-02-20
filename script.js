@@ -121,7 +121,7 @@ singleDrawBtn.addEventListener("click", () => {
     resultContainer.innerHTML = "";
     const card = drawCard();
     if (card) {
-        displayCard(card);
+        displayCard(card, 0);
     }
 });
 
@@ -137,6 +137,7 @@ tenDrawBtn.addEventListener("click", () => {
 
     while (!guaranteed3StarServant) {
         let newCard = drawCard();
+        console.log(newCard);
         if (newCard.type === "servant" && newCard.rarity === 3) {
             guaranteed3StarServant = newCard;
             drawnCards.push(newCard);
@@ -145,6 +146,7 @@ tenDrawBtn.addEventListener("click", () => {
 
     while (!guaranteed4StarCE) {
         let newCard = drawCard();
+        console.log(newCard);
         if (newCard.type === "craft_essence" && newCard.rarity === 4) {
             guaranteed4StarCE = newCard;
             drawnCards.push(newCard);
