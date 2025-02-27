@@ -76,9 +76,12 @@ function drawCard() {
     const randomNumber = Math.random();
     let cumulativeProbability = 0;
 
-    for (const card of cardPool) {
+    for (let i = 0, cumulativeProbability = 0; i < cardPool.length; i++) {
+        const card = cardPool[i];
         cumulativeProbability += card.probability;
+        cumulativeProbability = parseFloat(cumulativeProbability.toFixed(10)); // Round to 10 decimal places
         if (randomNumber < cumulativeProbability) {
+            console.log(`隨機數 ${randomNumber} 累積 ${cumulativeProbability}`);
             return card;
         }
     }
