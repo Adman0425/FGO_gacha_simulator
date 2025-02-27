@@ -129,17 +129,28 @@ singleDrawBtn.addEventListener("click", () => {
 });
 
 // 十連按鈕事件監聽器
+
+
 tenDrawBtn.addEventListener("click", () => {
     resultContainer.innerHTML = ""; 
 
     let drawnCards = [];
+
+    // 保證不返回null
+    function drawNonNullCard() {
+        let card = drawCard();
+        while (!card) {
+            card = drawCard();
+        }
+        return card;
+    }
 
     // 處理保底
     let guaranteed3StarServant = null;
     let guaranteed4StarCE = null;
 
     while (!guaranteed3StarServant) {
-        let newCard = drawCard();
+        const newCard = drawNonNullCard();
         console.log(newCard);
         if (newCard.type === "servant" && newCard.rarity === 3) {
             guaranteed3StarServant = newCard;
@@ -148,7 +159,7 @@ tenDrawBtn.addEventListener("click", () => {
     }
 
     while (!guaranteed4StarCE) {
-        let newCard = drawCard();
+        const newCard = drawNonNullCard();
         console.log(newCard);
         if (newCard.type === "craft_essence" && newCard.rarity === 4) {
             guaranteed4StarCE = newCard;
@@ -158,7 +169,7 @@ tenDrawBtn.addEventListener("click", () => {
 
     // 繼續抽卡
     for (let i = 0; i < 9; i++) {
-        drawnCards.push(drawCard());
+        drawnCards.push(drawNonNullCard());
     }
 
     // 打亂卡序
