@@ -5,6 +5,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        body {
+            text-align: center;
+            background-color: #f0f0f0;
+        }
         h1 {
             font-family: 'Cinzel', serif;
             padding: 10px;
@@ -17,6 +21,33 @@
             border: 1px solid black;
             margin: 5px;
             display: inline-block;
+            position: relative;
+            perspective: 1000px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+        }
+        .card-back {
+            background-color: #ccc;
+        }
+        .card-front {
+            transform: rotateY(180deg);
+        }
+        .card-back.glow-gold {
+            box-shadow: 0 0 15px 5px gold;
         }
         .result-container {
             margin-top: 20px;
@@ -29,15 +60,15 @@
         }
         #resultContainer {
             background-image: url("images/summon_background.jpg");
-            background-size: cover;
+            background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            padding: 20px;
-            min-height: 50vh;
+            padding: 30px;
+            min-height: 60vh;
         }
         .result-row {
             display: flex;
@@ -49,14 +80,11 @@
             opacity: 1;
             transition: opacity 0.2s;
             vertical-align: middle;
-            margin: 0 5px; /* 調整按鈕間距 */
+            margin: 0 5px;
         }
         .btn-img:disabled {
             cursor: not-allowed;
             opacity: 0.5;
-        }
-        body {
-            text-align: center;
         }
         .quartz-container {
             margin: 15px auto;
@@ -68,11 +96,32 @@
             gap: 5px;
             cursor: pointer;
         }
-        .quartz-controls {
+        .quartz-container img {
+            width: 40px;
+            height: auto;
+        }
+        .quartz-controls, .quick-add-controls {
             margin-top: 10px;
         }
         .quartz-controls input {
             width: 80px;
+        }
+        .info-panel {
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: left;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: white;
+        }
+        .info-panel h2 {
+            cursor: pointer;
+        }
+        .info-content {
+            max-height: 300px;
+            overflow-y: auto;
+            display: none; /* Default hidden */
         }
     </style>
 </head>
@@ -104,13 +153,17 @@
 
     <div id="quartzInfo" style="display: none;">
         <div class="quartz-container" title="點擊補充聖晶石">
-            <img src="images/saint_quartz.png" alt="聖晶石" style="width: 30px; height: 30px;">
+            <img src="images/saint_quartz.png" alt="聖晶石">
             <span id="quartzDisplay">0</span>
         </div>
         <div id="addQuartzContainer" class="quartz-controls" style="display: none;">
             <label>補充聖晶石：</label>
-            <input type="number" id="addQuartzInput" value="300">
+            <input type="number" id="addQuartzInput" value="">
             <button id="addQuartzBtn">補充</button>
+            <div class="quick-add-controls">
+                <button class="quick-add-btn" data-amount="30">+30</button>
+                <button class="quick-add-btn" data-amount="167">+167</button>
+            </div>
         </div>
     </div>
 
@@ -122,6 +175,19 @@
         <img id="tenDrawBtn" src="images/ten_draw_btn.png" alt="11回召喚" class="btn-img" disabled>
         <img id="luckyBagBtn" src="images/luckybag_draw_btn.png" alt="福袋召喚" class="btn-img" style="display:none;" disabled>
     </div>
+
+    <div class="info-panel">
+        <h2 id="statsToggle">統計分析 (點擊展開)</h2>
+        <div id="statsContent" class="info-content"></div>
+    </div>
+    <div class="info-panel">
+        <h2 id="historyToggle">抽卡歷史紀錄 (點擊展開)</h2>
+        <div id="historyContent" class="info-content"></div>
+    </div>
+
+    <audio id="sfx-click" src="sounds/click.mp3" preload="auto"></audio>
+    <audio id="sfx-summon" src="sounds/summon.mp3" preload="auto"></audio>
+    <audio id="sfx-gold-spark" src="sounds/gold-spark.mp3" preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>
