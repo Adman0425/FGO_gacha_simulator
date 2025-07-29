@@ -3,15 +3,13 @@
 <head>
     <title>Fate/Grand Order Customized Gacha Simulator</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         h1 {
             font-family: 'Cinzel', serif;
-            /* background-image: url("images/title_background.jpg"); */
-            background-size: contain;
-            background-repeat: no-repeat;
             padding: 10px;
             color: black;
-            text-shadow: 2px 2px 4px grey; /* 陰影 */
+            text-shadow: 2px 2px 4px grey;
         }
         .card {
             width: 132px;
@@ -22,42 +20,59 @@
         }
         .result-container {
             margin-top: 20px;
-            width: 1245px;
-            height: 720px;
+            max-width: 1245px;
             margin-left: auto;
-            margin-right: auto; /*Body水平置中*/
+            margin-right: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #resultContainer {
+            background-image: url("images/summon_background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            min-height: 50vh;
         }
         .result-row {
             display: flex;
             justify-content: center;
-        }
-        .result-row:first-child { /*第一行*/
-          width: 660px;
-        }
-        
-        .result-row:last-child { /*第二行*/
-          width: 550px;
-        }
-        #resultContainer {
-            background-image: url("images/summon_background.jpg");
-            background-size: contain;
-            background-repeat: no-repeat;
-            /* background-attachment: fixed; */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center; /*垂直置中*/
-            gap: 10px;
+            width: 100%;
         }
         .btn-img {
             cursor: pointer;
+            opacity: 1;
+            transition: opacity 0.2s;
+            vertical-align: middle;
+            margin: 0 5px; /* 調整按鈕間距 */
         }
-        .pool-option {
-            cursor: pointer;
-            margin: 5px;
+        .btn-img:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
         }
         body {
             text-align: center;
+        }
+        .quartz-container {
+            margin: 15px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .quartz-controls {
+            margin-top: 10px;
+        }
+        .quartz-controls input {
+            width: 80px;
         }
     </style>
 </head>
@@ -78,11 +93,35 @@
         <option value="replica7_pu1.json">仿篇敘述 Replica 應援召喚</option>
         <option value="replica7_pu2.json">仿篇敘述I 越界證明起點 冬木2035 推薦召喚1</option>
         <option value="replica7_pu3.json">仿篇敘述I 越界證明起點 冬木2035 推薦召喚2</option>
+        <option value="luckybag_pool.json">福袋召喚</option>
     </select>
 
+    <div id="initialQuartzSetup">
+        <label>設定初始聖晶石：</label>
+        <input type="number" id="initialQuartzInput" value="300">
+        <button id="setInitialQuartzBtn">確定</button>
+    </div>
+
+    <div id="quartzInfo" style="display: none;">
+        <div class="quartz-container" title="點擊補充聖晶石">
+            <img src="images/saint_quartz.png" alt="聖晶石" style="width: 30px; height: 30px;">
+            <span id="quartzDisplay">0</span>
+        </div>
+        <div id="addQuartzContainer" class="quartz-controls" style="display: none;">
+            <label>補充聖晶石：</label>
+            <input type="number" id="addQuartzInput" value="300">
+            <button id="addQuartzBtn">補充</button>
+        </div>
+    </div>
+
     <div id="resultContainer" class="result-container"></div>
-    <img id="singleDrawBtn" src="images/single_draw_btn.png" alt="1回召喚" class="btn-img">
-    <img id="tenDrawBtn" src="images/ten_draw_btn.png" alt="11回召喚" class="btn-img">
+
+    <div>
+        <img id="singleDrawBtn" src="images/single_draw_btn.png" alt="1回召喚" class="btn-img" disabled>
+        <img id="specialDrawBtn" src="images/twice_draw_btn.png" alt="連續兩回召喚" class="btn-img" style="display:none;" disabled>
+        <img id="tenDrawBtn" src="images/ten_draw_btn.png" alt="11回召喚" class="btn-img" disabled>
+        <img id="luckyBagBtn" src="images/luckybag_draw_btn.png" alt="福袋召喚" class="btn-img" style="display:none;" disabled>
+    </div>
 
     <script src="script.js"></script>
 </body>
