@@ -25,7 +25,8 @@
         .result-container {
             margin-top: 20px;
             max-width: 1245px;
-            height: 720px; /* 固定高度以維持背景比例 */
+            width: 100%; /* 讓寬度充滿可用空間，直到最大寬度 */
+            aspect-ratio: 1280 / 720; /* 維持16:9的長寬比 */
             margin-left: auto;
             margin-right: auto;
             display: flex;
@@ -39,6 +40,7 @@
             background-position: center;
             background-repeat: no-repeat;
             display: flex;
+            flex-direction: column; /* 改回 column 以便排列 row */
             align-items: center;
             justify-content: center;
             gap: 10px;
@@ -82,7 +84,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .quartz-display-container img {
-            width: 40px; /* 放大圖示 */
+            width: 40px;
             height: auto;
         }
         #quartzDisplay {
@@ -92,6 +94,21 @@
         }
         .quartz-controls {
             margin-top: 10px;
+        }
+        .history-stats-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            text-align: left;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        #historyLog {
+            max-height: 300px;
+            overflow-y: auto;
+            border-top: 1px solid #eee;
+            margin-top: 10px;
+            padding-top: 10px;
         }
     </style>
 </head>
