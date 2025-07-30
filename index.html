@@ -5,6 +5,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        body {
+            text-align: center;
+            background-color: #f0f0f0;
+        }
         h1 {
             font-family: 'Cinzel', serif;
             padding: 10px;
@@ -17,30 +21,17 @@
             border: 1px solid black;
             margin: 5px;
             display: inline-block;
-            position: relative; /* For animation */
-        }
-        .ssr-glow::after {
-            content: '';
-            position: absolute;
-            top: -5px; left: -5px;
-            right: -5px; bottom: -5px;
-            border-radius: 5px;
-            box-shadow: 0 0 15px 5px gold;
-            animation: glow-pulse 1.5s infinite;
-        }
-        @keyframes glow-pulse {
-            0% { box-shadow: 0 0 15px 5px gold; }
-            50% { box-shadow: 0 0 30px 10px gold; }
-            100% { box-shadow: 0 0 15px 5px gold; }
         }
         .result-container {
             margin-top: 20px;
             max-width: 1245px;
+            height: 720px; /* 固定高度以維持背景比例 */
             margin-left: auto;
             margin-right: auto;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
         #resultContainer {
             background-image: url("images/summon_background.jpg");
@@ -52,7 +43,8 @@
             justify-content: center;
             gap: 10px;
             padding: 30px;
-            min-height: 60vh;
+            width: 100%;
+            height: 100%;
         }
         .result-row {
             display: flex;
@@ -70,49 +62,40 @@
             cursor: not-allowed;
             opacity: 0.5;
         }
-        body {
-            text-align: center;
+        /* 聖晶石UI樣式 */
+        .quartz-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 15px 0;
         }
-        .quartz-container {
-            margin: 15px auto;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
+        .quartz-display-container {
+            background-color: #2c3e50;
+            border-radius: 20px;
+            padding: 5px 15px 5px 5px;
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 10px;
             cursor: pointer;
+            border: 1px solid #34495e;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        .quartz-container img {
-            width: 40px;
+        .quartz-display-container img {
+            width: 40px; /* 放大圖示 */
             height: auto;
+        }
+        #quartzDisplay {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
         }
         .quartz-controls {
             margin-top: 10px;
         }
-        .quartz-controls input {
-            width: 80px;
-        }
-        .history-stats-container {
-            max-width: 1200px;
-            margin: 20px auto;
-            text-align: left;
-            border: 1px solid #ccc;
-            padding: 15px;
-            border-radius: 8px;
-        }
-        #historyLog {
-            max-height: 300px;
-            overflow-y: auto;
-            border-top: 1px solid #eee;
-            margin-top: 10px;
-            padding-top: 10px;
-        }
     </style>
 </head>
 <body>
-    <audio id="pullSound" src="audios/pull_sound.mp3"></audio>
-    <audio id="ssrSound" src="audios/ssr_sound.mp3"></audio>
 
     <h1>Chaldea Summon Room</h1>
     <select id="poolSelect">
@@ -133,26 +116,33 @@
         <option value="luckybag_pool.json">福袋召喚</option>
     </select>
 
-    <div id="initialQuartzSetup">
-        <label>設定初始聖晶石：</label>
-        <input type="number" id="initialQuartzInput" value="300">
-        <button id="setInitialQuartzBtn">確定</button>
-    </div>
-
-    <div id="quartzInfo" style="display: none;">
-        <div class="quartz-container" title="點擊補充聖晶石">
-            <img src="images/saint_quartz.png" alt="聖晶石">
-            <span id="quartzDisplay">0</span>
+    <div class="quartz-section">
+        <div id="initialQuartzSetup">
+            <label>初始數量設定：</label>
+            <input type="number" id="initialQuartzInput" value="300">
+            <button id="setInitialQuartzBtn">決定</button>
         </div>
-        <div id="addQuartzContainer" class="quartz-controls" style="display: none;">
-            <label>補充聖晶石：</label>
-            <input type="number" id="addQuartzInput" value="300">
-            <button id="addQuartzBtn">補充</button>
-            <button class="quickAddBtn" data-amount="30">+30</button>
-            <button class="quickAddBtn" data-amount="167">+167</button>
+
+        <div id="quartzInfo" style="display: none;">
+            <div class="quartz-display-container" title="聖晶石補充">
+                <img src="images/saint_quartz.png" alt="聖晶石">
+                <span id="quartzDisplay">0</span>
+            </div>
+            <div id="addQuartzContainer" class="quartz-controls" style="display: none;">
+                <label>補充數：</label>
+                <select id="addQuartzSelect">
+                    <option value="1">1</option>
+                    <option value="5">5</option>
+                    <option value="18">18</option>
+                    <option value="41">41</option>
+                    <option value="76">76</option>
+                    <option value="167">167</option>
+                </select>
+                <button id="addQuartzBtn">補充</button>
+            </div>
         </div>
     </div>
-
+    
     <div id="resultContainer" class="result-container"></div>
 
     <div>
@@ -163,9 +153,9 @@
     </div>
     
     <div class="history-stats-container">
-        <h3>統計分析面板</h3>
+        <h3>統計面板</h3>
         <div id="statsPanel"></div>
-        <h3>抽卡歷史紀錄</h3>
+        <h3>召喚履歷</h3>
         <div id="historyLog"></div>
     </div>
 
