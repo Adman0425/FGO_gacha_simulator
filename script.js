@@ -24,8 +24,6 @@ const addQuartzBtn = document.getElementById("addQuartzBtn");
 const quartzDisplayContainer = document.querySelector(".quartz-display-container");
 const statsPanel = document.getElementById("statsPanel");
 const historyLog = document.getElementById("historyLog");
-const pullSound = document.getElementById("pullSound");
-const ssrSound = document.getElementById("ssrSound");
 
 // 聖晶石顯示和按鈕狀態
 function updateQuartzDisplay() {
@@ -150,13 +148,6 @@ function drawCard() {
 function displayCards(cards) {
     resultContainer.innerHTML = "";
     if (!Array.isArray(cards)) cards = [cards];
-
-    const hasSSR = cards.some(card => card.rarity === 5);
-    if (hasSSR) {
-        ssrSound.play();
-    } else {
-        pullSound.play();
-    }
 
     if (cards.length <= 2) {
         const row = document.createElement("div");
