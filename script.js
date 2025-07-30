@@ -2,8 +2,8 @@
 let cardPool = []; // 初始化 cardPool
 let singleDrawCounter = 0;
 let saintQuartz = 0;
-let totalQuartzSpent = 0; // 追蹤總花費
-let gachaHistory = []; // 抽卡歷史
+let totalQuartzSpent = 0;
+let gachaHistory = [];
 let currentPoolFile = "normal_pool.json";
 
 // DOM 元素
@@ -19,16 +19,15 @@ const setInitialQuartzBtn = document.getElementById("setInitialQuartzBtn");
 const initialQuartzSetup = document.getElementById("initialQuartzSetup");
 const quartzInfo = document.getElementById("quartzInfo");
 const addQuartzContainer = document.getElementById("addQuartzContainer");
-const addQuartzInput = document.getElementById("addQuartzInput");
+const addQuartzSelect = document.getElementById("addQuartzSelect");
 const addQuartzBtn = document.getElementById("addQuartzBtn");
-const quartzContainer = document.querySelector("#quartzInfo .quartz-container");
-const quickAddBtns = document.querySelectorAll(".quickAddBtn");
+const quartzDisplayContainer = document.querySelector(".quartz-display-container");
 const statsPanel = document.getElementById("statsPanel");
 const historyLog = document.getElementById("historyLog");
 const pullSound = document.getElementById("pullSound");
 const ssrSound = document.getElementById("ssrSound");
 
-// 更新聖晶石顯示和按鈕狀態
+// 聖晶石顯示和按鈕狀態
 function updateQuartzDisplay() {
     quartzDisplay.textContent = saintQuartz;
     checkButtons();
@@ -47,10 +46,6 @@ function checkButtons() {
     luckyBagBtn.style.display = isLuckyBag ? "inline-block" : "none";
 }
 
-function updateSingleDrawButtonState() {
-    checkButtons();
-}
-
 // 設定初始聖晶石
 setInitialQuartzBtn.addEventListener("click", () => {
     saintQuartz = parseInt(initialQuartzInput.value, 10) || 0;
@@ -61,29 +56,16 @@ setInitialQuartzBtn.addEventListener("click", () => {
 
 // 補充聖晶石
 addQuartzBtn.addEventListener("click", () => {
-    const amount = parseInt(addQuartzInput.value, 10) || 0;
-    if (amount > 0) {
-        saintQuartz += amount;
-    }
+    const amount = parseInt(addQuartzSelect.value, 10);
+    saintQuartz += amount;
     updateQuartzDisplay();
     addQuartzContainer.style.display = "none";
 });
 
-// 快捷補充聖晶石
-quickAddBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-        const amount = parseInt(btn.dataset.amount, 10);
-        saintQuartz += amount;
-        updateQuartzDisplay();
-        addQuartzContainer.style.display = "none";
-    });
-});
-
 // 點擊聖晶石圖片顯示補充介面
-quartzContainer.addEventListener("click", () => {
-    addQuartzContainer.style.display = "block";
+quartzDisplayContainer.addEventListener("click", () => {
+    addQuartzContainer.style.display = addQuartzContainer.style.display === "none" ? "block" : "none";
 });
-
 
 function loadPool(poolFile) {
     currentPoolFile = poolFile;
@@ -94,7 +76,7 @@ function loadPool(poolFile) {
             calculateCardProbabilities(data);
             checkButtons();
         })
-        .catch(error => console.error("載入卡池資料錯誤：", error));
+        .catch(error => console.error("載入卡池錯誤：", error));
 }
 
 function calculateCardProbabilities(pool) {
@@ -147,6 +129,8 @@ function calculateCardProbabilities(pool) {
 
 poolSelect.addEventListener("change", () => {
     loadPool(poolSelect.value);
+    singleDrawCounter = 0;
+    checkButtons();
 });
 
 loadPool("normal_pool.json");
@@ -154,7 +138,6 @@ loadPool("normal_pool.json");
 function drawCard() {
     const randomNumber = Math.random();
     let cumulativeProbability = 0;
-
     for (const card of cardPool) {
         cumulativeProbability += card.probability || 0;
         if (randomNumber < cumulativeProbability) {
@@ -166,24 +149,16 @@ function drawCard() {
 
 function displayCards(cards) {
     resultContainer.innerHTML = "";
-    let hasSSR = false;
+    if (!Array.isArray(cards)) cards = [cards];
 
-    if (!Array.isArray(cards)) cards = [cards]; // 確保是陣列
-
-    cards.forEach(card => {
-        if (card.rarity === 5) hasSSR = true;
-    });
-
+    const hasSSR = cards.some(card => card.rarity === 5);
     if (hasSSR) {
         ssrSound.play();
     } else {
         pullSound.play();
     }
 
-    if (cards.length === 1) {
-        const cardDiv = createCardElement(cards[0]);
-        resultContainer.appendChild(cardDiv);
-    } else if (cards.length === 2) {
+    if (cards.length <= 2) {
         const row = document.createElement("div");
         row.classList.add("result-row");
         cards.forEach(card => row.appendChild(createCardElement(card)));
@@ -193,7 +168,6 @@ function displayCards(cards) {
         row1.classList.add("result-row");
         const row2 = document.createElement("div");
         row2.classList.add("result-row");
-
         cards.forEach((card, index) => {
             const cardDiv = createCardElement(card);
             if (index < 6) {
@@ -202,7 +176,6 @@ function displayCards(cards) {
                 row2.appendChild(cardDiv);
             }
         });
-
         resultContainer.appendChild(row1);
         resultContainer.appendChild(row2);
     }
@@ -211,11 +184,8 @@ function displayCards(cards) {
 function createCardElement(card) {
     const cardDiv = document.createElement("div");
     cardDiv.classList.add("card");
-    if (card.rarity === 5) {
-        cardDiv.classList.add("ssr-glow");
-    }
     const imgSrc = card.imageUrl;
-    cardDiv.innerHTML = `<img src="${imgSrc}" width="132" height="144" alt="${card.name}">`;
+    cardDiv.innerHTML = `<img src="${imgSrc}" style="width:100%; height:100%;" alt="${card.name}">`;
     return cardDiv;
 }
 
@@ -230,13 +200,11 @@ function updateHistoryAndStats(cards, cost) {
     totalQuartzSpent += cost;
     gachaHistory.unshift(...cards);
 
-    // 更新歷史紀錄
     historyLog.innerHTML = "";
     gachaHistory.forEach(card => {
         historyLog.innerHTML += `<div>${card.rarity}★ ${card.type === 'servant' ? '從者' : '禮裝'}: ${card.name}</div>`;
     });
 
-    // 更新統計面板
     const stats = {
         totalPulls: gachaHistory.length,
         ssrServants: gachaHistory.filter(c => c.type === 'servant' && c.rarity === 5).length,
@@ -246,54 +214,52 @@ function updateHistoryAndStats(cards, cost) {
     };
     
     statsPanel.innerHTML = `
-        總抽數: ${stats.totalPulls} | 總花費: ${totalQuartzSpent} 聖晶石<br>
-        五星從者: ${stats.ssrServants} | 四星從者: ${stats.srServants}<br>
-        五星禮裝: ${stats.ssrCEs} | 四星禮裝: ${stats.srCEs}
+        合計召喚數: ${stats.totalPulls} | 合計消費: ${totalQuartzSpent} 聖晶石<br>
+        五星從者: ${stats.ssrServants} (${(stats.ssrServants / stats.totalPulls * 100 || 0).toFixed(2)}%) | 
+        四星從者: ${stats.srServants} (${(stats.srServants / stats.totalPulls * 100 || 0).toFixed(2)}%)<br>
+        五星禮裝: ${stats.ssrCEs} (${(stats.ssrCEs / stats.totalPulls * 100 || 0).toFixed(2)}%) | 
+        四星禮裝: ${stats.srCEs} (${(stats.srCEs / stats.totalPulls * 100 || 0).toFixed(2)}%)
     `;
 }
-
 
 // 單抽按鈕
 singleDrawBtn.addEventListener("click", () => {
     if (saintQuartz < 3) {
-        alert("聖晶石數量不足，無法進行單抽。");
+        alert("聖晶石不足");
         return;
     }
     saintQuartz -= 3;
     singleDrawCounter++;
-    
     const drawnCard = drawNonNullCard();
     displayCards([drawnCard]);
     updateHistoryAndStats([drawnCard], 3);
     updateQuartzDisplay();
-    updateSingleDrawButtonState();
+    checkButtons();
 });
 
 // 特殊召喚按鈕
 specialDrawBtn.addEventListener("click", () => {
     if (saintQuartz < 3) {
-        alert("聖晶石數量不足，無法進行召喚。");
+        alert("聖晶石不足");
         return;
     }
     saintQuartz -= 3;
-    singleDrawCounter = 0; // 重置計數器
-    
+    singleDrawCounter = 0;
     let drawnCards = [drawNonNullCard(), drawNonNullCard()];
     displayCards(drawnCards);
     updateHistoryAndStats(drawnCards, 3);
     updateQuartzDisplay();
-    updateSingleDrawButtonState();
+    checkButtons();
 });
 
 // 十連按鈕
 tenDrawBtn.addEventListener("click", () => {
     if (saintQuartz < 30) {
-        alert("聖晶石數量不足，無法進行十連抽。");
+        alert("聖晶石不足");
         return;
     }
     saintQuartz -= 30;
     
-    // 處理保底
     let drawnCards = [];
     for (let i = 0; i < 11; i++) {
         drawnCards.push(drawNonNullCard());
@@ -329,26 +295,23 @@ tenDrawBtn.addEventListener("click", () => {
 // 福袋召喚按鈕
 luckyBagBtn.addEventListener("click", () => {
     if (saintQuartz < 15) {
-        alert("聖晶石數量不足，無法進行福袋召喚。");
+        alert("聖晶石不足");
         return;
     }
     saintQuartz -= 15;
     
     let drawnCards = [];
     
-    // 保底五星從者
     const fiveStarServants = cardPool.filter(c => c.type === 'servant' && c.rarity === 5);
     if (fiveStarServants.length > 0) {
         drawnCards.push(fiveStarServants[Math.floor(Math.random() * fiveStarServants.length)]);
     }
 
-    // 保底四星從者
     const fourStarServants = cardPool.filter(c => c.type === 'servant' && c.rarity === 4);
     if (fourStarServants.length > 0) {
         drawnCards.push(fourStarServants[Math.floor(Math.random() * fourStarServants.length)]);
     }
 
-    // 補足剩餘的9張
     for (let i = 0; i < 9; i++) {
         drawnCards.push(drawNonNullCard());
     }
