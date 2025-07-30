@@ -203,7 +203,7 @@ function updateHistoryAndStats(cards, cost) {
         ssrCEs: gachaHistory.filter(c => c.type === 'craft_essence' && c.rarity === 5).length,
         srCEs: gachaHistory.filter(c => c.type === 'craft_essence' && c.rarity === 4).length
     };
-    
+
     statsPanel.innerHTML = `
         合計召喚數: ${stats.totalPulls} | 合計消費: ${totalQuartzSpent} 聖晶石<br>
         五星從者: ${stats.ssrServants} (${(stats.ssrServants / stats.totalPulls * 100 || 0).toFixed(2)}%) | 
@@ -303,7 +303,8 @@ luckyBagBtn.addEventListener("click", () => {
         drawnCards.push(fourStarServants[Math.floor(Math.random() * fourStarServants.length)]);
     }
 
-    for (let i = 0; i < 9; i++) {
+    const remainingPulls = 11 - drawnCards.length;
+    for (let i = 0; i < remainingPulls; i++) {
         drawnCards.push(drawNonNullCard());
     }
 
